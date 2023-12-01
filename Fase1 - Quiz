@@ -1,0 +1,69 @@
+def jogo_perguntas_respostas(perguntas_respostas):
+    print('Bem vindos ao Jogo de Alfabetização')
+    print('Esse jogo serve para auxiliar no processo de alfabetização.')
+    print('Nessa primeira fase vamos aprender o nosso alfabeto.Vamos lá?')
+    print('-----------------------------------------------')
+    print('O nosso Alfabeto é composto por 26 letras divididas entre vogais e consoantes')
+    print('-------------------------------------------------------------------')
+    print(" As VOGAIS presentes em nosso alfabeto é: A a, E e, I i, O o, U u, no total são 5 Vogais")
+    print('-------------------------------------------------------------------')
+    print ("As demais letras presentes no alfabeto tirando as Vogais são chamadas de CONSOANTES, no total são 21 consoantes") 
+    print('-------------------------------------------------------------------')
+    print(' O NOSSO ALFABETO EM LETRA MAIÚSCULA: ')
+    print('A, B, C, D, E ,F , G ,H ,I ,J , K, L, M, N, O, P, Q, R, S, T, U, V, W, X, Y, Z')
+    print('-------------------------------------------------------------------')
+    print('O nosso alfabeto em letra minúscula: ')
+    print('a, b, c, d, e, f, g, h, i, j, k, l, m, n, o, p, q, r, s, t, u, v, w, x, y, z')
+    print('------------------------------------------------------------------------')
+    print('AGORA VAMOS EM UM JOGO FACIL DE PERGUNTAS E RESPOSTAS')
+    pontuacao = 0
+
+    for pergunta, resposta_correta in perguntas_respostas.items():
+        resposta_usuario = input(pergunta + "\nSua resposta: ")
+        
+        if resposta_usuario.lower() == resposta_correta.lower():
+            print("Correto!\n")
+            pontuacao += 1
+        else:
+            print(f"Incorreto. A resposta correta é {resposta_correta}.\n")
+
+    print(f"Fim do jogo! Sua pontuação final é {pontuacao} pontos.")
+
+# Exemplo de perguntas e respostas
+perguntas_respostas = {
+"Qual é a primeira letra do alfabeto brasileiro?":"a",
+"Quantas letras tem o alfabeto brasileiro?":"26",
+"Qual letra vem antes da letra P?":"o",
+"Complete: A, B, C, D, E, F, G, H, I, J, K, _, M":"l",
+"Qual é a última letra do alfabeto brasileiro?":"z",
+"Complete: A, _, C, D, E.":"b",
+"Qual é a quarta letra do alfabeto brasileiro?":"d",
+"Quantas vogais existem no alfabeto brasileiro?":"5",
+"Qual é a letra do meio no alfabeto brasileiro?":"m",
+"Complete: A, B, _, D, E.":"c",
+"Qual é a quinta letra do alfabeto brasileiro?":"e",
+"Quantas consoantes existem no alfabeto brasileiro?":"21",
+"Qual é a oitava letra do alfabeto brasileiro?":"h",
+"Qual letra vem depois da letra L ?":"M",
+"Complete: A, B, C, D, E, _, G, H":"f",
+"Qual é a sexta letra do alfabeto brasileiro?":"f",
+"Complete: A, B, C, _, E, F.":"d",
+"Qual é a décima letra do alfabeto brasileiro?":"J",
+"Qual é a letra que vem antes da letra R?":"Q",
+"Complete: A, B, C, D, _, F, G.":"e",
+"Qual é a terceira letra do alfabeto brasileiro?":"c",
+"Qual letra vem depois da letra X?":"y",
+"Qual é a sétima letra do alfabeto brasileiro?":"g",
+"Quais letras são vogais?":" a e i o u",
+"Complete: A, _, C, D, E, F.":"b",
+"Qual é a letra que vem depois da letra Q?":"r",
+"Qual é a nona letra do alfabeto brasileiro?":"i",
+"Qual letra vem antes da letra Y?":"z",
+"Qual é a segunda letra do alfabeto brasileiro?":"b",
+"Qual letra vem depois da letra N?":"o",
+"Qual é a letra que vem antes da letra U?":"t",
+"Qual letra vem antes da letra V?":"u"
+}
+
+# Iniciar o jogo
+jogo_perguntas_respostas(perguntas_respostas)
