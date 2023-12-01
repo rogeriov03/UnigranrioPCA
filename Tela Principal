@@ -1,0 +1,51 @@
+import tkinter as tk
+from subprocess import Popen
+
+def open_Quiz():
+    Popen(["python", "Quiz.py"])
+
+def open_Forca():
+    Popen(["python", "Forca.py"])
+
+def open_Caca_Palavras():
+    Popen(["python", "Caca_Palavras.py"])
+
+def open_Memoria():
+    Popen(["python", "Memoria.py"])
+
+def open_Atlas():
+    Popen(["python", "Atlas.py"])
+
+root = tk.Tk()
+
+root.geometry("800x125")  # 5cm de altura x 20cm de largura
+root.title("Jogos Alfabit, ajudando na alfabetização")
+
+frame_topo = tk.Frame(root)
+frame_topo.pack(side=tk.TOP, pady=2)  # Menos espaço entre os botões de cima e de baixo
+
+button_Quiz = tk.Button(frame_topo, text="Fase 1 - Quiz", command=open_Quiz, height=2, width=20)
+button_Quiz.pack(side=tk.LEFT, padx=2)
+
+button_Forca = tk.Button(frame_topo, text="Fase 2 - Forca", command=open_Forca, height=2, width=20)
+button_Forca.pack(side=tk.LEFT, padx=2)
+
+button_Caca_Palavras = tk.Button(frame_topo, text="Fase 3 - Caça-Palavras", command=open_Caca_Palavras, height=2, width=20)
+button_Caca_Palavras.pack(side=tk.LEFT, padx=2)
+
+frame_inferior = tk.Frame(root)
+frame_inferior.pack(side=tk.BOTTOM, pady=2)  # Menos espaço entre os botões de cima e de baixo
+
+button_Memoria = tk.Button(frame_inferior, text="Fase 4 - Memória", command=open_Memoria, height=2, width=20)
+button_Memoria.pack(side=tk.LEFT, padx=2)
+
+button_Atlas = tk.Button(frame_inferior, text="Fase 5 - Atlas", command=open_Atlas, height=2, width=20)
+button_Atlas.pack(side=tk.LEFT, padx=2)
+
+button_exit = tk.Button(frame_inferior, text="Sair", command=root.destroy, height=2, width=20)
+button_exit.pack(side=tk.LEFT, padx=2)
+
+label_nome_canto_inferior = tk.Label(root, text="Rogério Vieira - Unigranrio", font=("Arial", 10))
+label_nome_canto_inferior.place(relx=1, rely=1, anchor="se")
+
+root.mainloop()
