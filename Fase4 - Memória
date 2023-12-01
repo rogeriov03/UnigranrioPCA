@@ -1,0 +1,96 @@
+import pygame
+import sys
+
+pygame.init()
+
+PRETO = (0, 0, 0)
+BRANCO = (255, 255, 255)
+
+largura = 800
+altura = 600
+janela = pygame.display.set_mode((largura, altura))
+pygame.display.set_caption("Memória")
+
+fonte = pygame.font.Font(None, 32)
+
+# Perguntas e Respostas
+perguntas_respostas = [
+    {"pergunta": "Qual das opções abaixo é um brinquedo?", "respostas": ["Humano", "Boneca", "Luneta", "Beleza"], "correta": "Boneca"},
+    {"pergunta": "Qual das opções abaixo é um objeto?", "respostas": ["Hiena", "Levado", "Menina", "Telefone"], "correta": "Telefone"},
+    {"pergunta": "Qual das opções abaixo é uma ave?", "respostas": ["Papagaio", "Jiboia", "Maleta", "Gaveta"], "correta": "Papagaio"},
+    {"pergunta": "Qual das opções abaixo é uma fruta?", "respostas": ["Família", "Holofote", "Jabuticaba", "Farofa"], "correta": "Jabuticaba"},
+    {"pergunta": "Qual das opções abaixo é um suco?", "respostas": ["Coruja", "Novelo", "Bigode", "Limonada"], "correta": "Limonada"},
+    {"pergunta": "Qual das opções abaixo é uma sobremesa?", "respostas": ["Navio", "Gelatina", "Dieta", "Cavalo"], "correta": "Gelatina"},
+    {"pergunta": "Qual das opções abaixo é um lugar?", "respostas": ["Biblioteca", "Bexiga", "Dominó", "Feminino"], "correta": "Biblioteca"},
+    {"pergunta": "Qual das opções abaixo é um dia da semana?", "respostas": ["Goiaba", "Novela", "Sábado", "Jaleco"], "correta": "Sábado"},
+    {"pergunta": "Qual das opções abaixo é uma roupa?", "respostas": ["Universo", "Imagem", "Pijama", "Sacola"], "correta": "Pijama"},
+    {"pergunta": "Qual das opções abaixo é uma profissão?", "respostas": ["Detetive", "Elogio", "Tomate", "Banana"], "correta": "Detetive"},
+    {"pergunta": "Qual das opções abaixo é um instrumento?", "respostas": ["Caranguejo", "Violão", "Bochecha", "Gasoso"], "correta": "Violão"},
+    {"pergunta": "Qual das opções abaixo é uma cor?", "respostas": ["Natureza", "Abacate", "Fumaça", "Violeta"], "correta": "Violeta"},
+    {"pergunta": "Qual das opções abaixo é um esporte?", "respostas": ["Basquete", "Limite", "Caneca", "Dezena"], "correta": "Basquete"},
+    {"pergunta": "Qual das opções abaixo é uma emoção?", "respostas": ["Gavião", "Felicidade", "Hábito", "Levado"], "correta": "Felicidade"},
+    {"pergunta": "Qual das opções abaixo é um doce?", "respostas": ["Bonito", "Comida", "Fivela", "Chocolate"], "correta": "Chocolate"},
+]
+
+pergunta_atual = 0
+pontuacao = 0
+
+def mostrar_pergunta(pergunta):
+    texto_pergunta = fonte.render(pergunta["pergunta"], True, PRETO)
+    janela.blit(texto_pergunta, (50, 50))
+
+    y = 150
+    for i, resposta in enumerate(pergunta["respostas"]):
+        texto_resposta = fonte.render(f"{chr(97 + i)}) {resposta}", True, PRETO)
+        rect = texto_resposta.get_rect(topleft=(50, y))
+        janela.blit(texto_resposta, rect)
+        y += 50
+
+def main():
+    global pergunta_atual, pontuacao
+
+    while pergunta_atual < len(perguntas_respostas):
+        for evento in pygame.event.get():
+            if evento.type == pygame.QUIT:
+                pygame.quit()
+                sys.exit()
+            elif evento.type == pygame.MOUSEBUTTONDOWN and evento.button == 1:
+                x, y = evento.pos
+                verificar_clicavel(x, y)
+
+        janela.fill(BRANCO)
+        mostrar_pergunta(perguntas_respostas[pergunta_atual])
+        pygame.display.flip()
+
+def verificar_clicavel(x, y):
+    global pergunta_atual, pontuacao
+
+    pergunta = perguntas_respostas[pergunta_atual]
+    y_pos = 150
+    for i in range(len(pergunta["respostas"])):
+        rect = pygame.Rect(50, y_pos, largura - 100, 50)
+        if rect.collidepoint(x, y):
+            verificar_resposta(i)
+            return
+        y_pos += 50
+
+def verificar_resposta(resposta_escolhida):
+    global pergunta_atual, pontuacao
+
+    pergunta = perguntas_respostas[pergunta_atual]
+    if pergunta["respostas"][resposta_escolhida] == pergunta["correta"]:
+        pontuacao += 1
+
+    pergunta_atual += 1
+
+    if pergunta_atual < len(perguntas_respostas):
+        main()
+    else:
+        # Fim do quiz
+        print(f"Sua pontuação final: {pontuacao} de {len(perguntas_respostas)}")
+        pygame.quit()
+        sys.exit()
+
+if __name__ == "__main__":
+    print('Você chegou no quiz!')
+    main()
