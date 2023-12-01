@@ -1,0 +1,118 @@
+import random
+import os
+
+# Letras fornecidas e lista de palavras
+letras = [
+    'A', 'O', 'L', 'E', 'I', 'N', 'D', 'D', 'L', 'R', 'V', 'E',
+    'N', 'Y', 'E', 'S', 'H', 'E', 'N', 'T', 'H', 'O', 'O', 'E',
+    'T', 'A', 'I', 'C', 'O', 'T', 'T', 'A', 'I', 'T', 'G', 'P',
+    'T', 'E', 'F', 'O', 'A', 'N', 'B', 'S', 'S', 'W', 'A', 'L',
+    'F', 'W', 'A', 'L', 'F', 'A', 'B', 'E', 'T', 'O', 'L', 'E',
+    'A', 'A', 'C', 'A', 'O', 'O', 'W', 'T', 'S', 'S', 'S', 'P',
+    'S', 'T', 'U', 'E', 'S', 'S', 'E', 'K', 'E', 'F', 'N', 'L',
+    'A', 'T', 'L', 'G', 'U', 'N', 'R', 'O', 'P', 'N', 'H', 'T',
+    'H', 'E', 'D', 'T', 'M', 'O', 'G', 'H', 'A', 'C', 'E', 'P',
+    'T', 'H', 'A', 'T', 'C', 'C', 'U', 'A', 'A', 'C', 'S', 'A',
+    'S', 'S', 'D', 'U', 'L', 'C', 'W', 'E', 'K', 'I', 'T', 'E',
+    'H', 'D', 'E', 'P', 'N', 'E', 'Y', 'H', 'L', 'T', 'E', 'T',
+]
+
+palavras = ['ALFABETO', 'CONSOANTE', 'VOGAL', 'ESCOLA', 'FACULDADE']
+
+# Dicas
+dicas = {
+    'ALFABETO': 'Letras de um idioma.',
+    'CONSOANTE': 'Letra que não é uma vogal.',
+    'VOGAL': 'Letra que é uma unidade sonora.',
+    'ESCOLA': 'Local de aprendizado.',
+    'FACULDADE': 'Instituição de ensino superior.',
+}
+
+# LETRAS 
+tabuleiro = []
+for i in range(12):
+    linha = []
+    for j in range(12):
+        linha.append(letras[i * 12 + j])
+    tabuleiro.append(linha)
+
+# MOSTRAR O TABULEIRO
+def exibir_tabuleiro(tabuleiro):
+    for linha in tabuleiro:
+        print(' '.join(linha))
+    print()
+
+# Função para encontrar palavras no tabuleiro e destacá-las
+def encontrar_palavra(tabuleiro, palavra):
+    direcoes = [(-1, -1), (-1, 0), (-1, 1), (0, -1), (0, 1), (1, -1), (1, 0), (1, 1)]
+    linhas, colunas = len(tabuleiro), len(tabuleiro[0])
+    palavra = palavra.upper()
+
+    # Criar uma cópia do tabuleiro
+    tabuleiro_copia = [linha[:] for linha in tabuleiro]
+
+    for i in range(linhas):
+        for j in range(colunas):
+            if tabuleiro[i][j] == palavra[0]:
+                for direcao in direcoes:
+                    di, dj = direcao
+                    encontrou = True
+
+                    for k in range(1, len(palavra)):
+                        ni, nj = i + k * di, j + k * dj
+                        if 0 <= ni < linhas and 0 <= nj < colunas and tabuleiro[ni][nj] == palavra[k]:
+                            continue
+                        else:
+                            encontrou = False
+                            break
+
+                    if encontrou:
+                        # Destacar a palavra na cópia do tabuleiro substituindo por asteriscos
+                        for k in range(len(palavra)):
+                            tabuleiro_copia[i + k * di][j + k * dj] = '*'
+
+                        # Exibir o tabuleiro com a palavra destacada
+                        os.system('cls')
+                        print(f"Parabéns! Você encontrou a palavra '{palavra}'!")
+                        exibir_tabuleiro(tabuleiro_copia)
+                        return True
+
+    return False
+
+# DAR DICAS
+def dar_dica():
+    palavra = random.choice(palavras)
+    dica = dicas.get(palavra, 'Desculpe, sem dica disponível.')
+    print(f'Dica: {dica}')
+
+# Início do jogo
+print("\nCAÇA PALAVRAS")
+print("Encontre as palavras no tabuleiro:\n")
+
+# Exibir tabuleiro inicial
+exibir_tabuleiro(tabuleiro)
+
+############################################################################################
+
+# Jogar o jogo
+encontradas = []
+while len(encontradas) < len(palavras):
+    palavra = input("Digite uma palavra: ").strip().upper()
+
+    if palavra in palavras:
+        if palavra not in encontradas:
+            if encontrar_palavra(tabuleiro, palavra):
+                encontradas.append(palavra)
+            else:
+                print("Você já encontrou esta palavra. Tente outra!")
+        else:
+            print("Você já encontrou esta palavra. Tente outra!")
+    else:
+        print("Palavra não encontrada. Tente novamente.")
+        dar_dica()  # Chamar a função para dar uma dica ao jogador
+
+    if len(encontradas) == len(palavras):
+        print("Parabéns! Você encontrou todas as palavras!")
+        break
+
+print("Obrigado por jogar!")
