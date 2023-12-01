@@ -1,0 +1,161 @@
+import pygame as pg
+import random
+import pygame.mixer
+
+pygame.init()
+window = pg.display.set_mode((1000, 600))
+
+pg.font.init()
+fonte = pg.font.SysFont('Arial Black', 20)
+fonte2 = pg.font.SysFont('Arial', 20)
+fonte3 = pg.font.SysFont('Arial', 40)
+fonte4 = pg.font.SysFont('Britannic bold', 40)
+fonte5 = pg.font.SysFont('Britannic bold', 80)
+fonte6 = pg.font.SysFont('Britannic bold', 20)
+
+Palavras = ['SA U DE', 'SI LEN CIO', 'POR TA', 'PI RA MI DE', 'ES TRE LA', 'E NER GI A', 'GUAR DA - ROU PA',
+            'CA MI SE TA', 'COM PU TA DOR', 'PRO GRA MA']
+Palavra_secreta = ''
+letra_escolhida = [' ', '-']
+chance = 0
+Acertos = 0
+end_game = True
+Palavra_Escondida = ''
+letra = ''
+click_last_status = False
+correto = pygame.mixer.Sound('smw_coin.wav')
+erro = pygame.mixer.Sound('smw_lemmy_wendy_incorrect.wav')
+fail = 'Não'
+
+
+def Desenho_da_Forca(window, chance):
+    pg.draw.rect(window, (250, 250, 250), (0, 0, 1000, 600))
+    pg.draw.line(window, (139,69,19), (100, 500), (100, 100,), 50)
+    texto2 = fonte2.render('Feito por: Ryan Santos Rodrigues', 1, (0, 0, 0))
+    window.blit(texto2, (700, 570))
+    pg.draw.line(window, (135,206,235), (40, 500), (160, 500), 50)
+    pg.draw.line(window, (139,69,19), (76, 100), (320, 100), 50)
+    pg.draw.line(window, (135,206,235), (126, 100), (294, 100), 50)
+    pg.draw.line(window, (139,69,19), (300, 100), (300, 150), 10)
+    pg.draw.circle(window, (176, 196, 222), (92, 96), 6, 50)
+    pg.draw.circle(window, (176, 196, 222), (92, 115), 6, 50)
+    if chance >= 1:
+        # Cabeça
+        pg.draw.circle(window, (135,206,235), (300, 200), 50, 60)
+    if chance >= 2:
+        # Tronco
+        pg.draw.line(window, (135,206,235), (300, 260), (300, 350), 60)
+    if chance >= 3:
+        # Braço Direito
+        pg.draw.line(window, (135,206,235), (300, 260), (225, 350), 60)
+    if chance >= 4:
+        # Braço Esquerdo
+        pg.draw.line(window, (135,206,235), (300, 260), (375, 350), 60)
+    if chance >= 5:
+        # Perna Direita
+        pg.draw.line(window, (135,206,235), (300, 350), (375, 450), 60)
+    if chance >= 6:
+        # Perna Direita
+        pg.draw.line(window, (135,206,235), (300, 350), (225, 450), 60)
+        textof = fonte5.render('GAME OVER!', 1, (250, 0, 0))
+        window.blit(textof, (590, 300))
+        textof2 = fonte6.render('Aperte qualquer tecla para fechar o jogo.', 1, (250, 0, 0))
+        window.blit(textof2, (600, 360))
+
+
+def restart(window):
+    pg.draw.rect(window, (230,230,230), (700, 100, 200, 65))
+    texto = fonte4.render('Reiniciar', 1, (135,206,235))
+    window.blit(texto, (740, 120))
+
+def Sorteando_Palavra(Palavras, Palavra_secreta, end_game):
+    if end_game == True:
+        palavra_n = random.randint(0, len(Palavras) - 1)
+        Palavra_secreta= Palavras[palavra_n]
+        end_game = False
+        chance = 0
+    return Palavra_secreta, end_game
+
+def Escondendo_Palavra(Palavra_secreta, Palavra_Escondida, letra_escolhida):
+    Palavra_Escondida = Palavra_secreta
+    for n in range(len(Palavra_Escondida)):
+        if Palavra_Escondida[n:n + 1] not in letra_escolhida:
+           Palavra_Escondida = Palavra_Escondida.replace(Palavra_Escondida[n], '_')
+    return Palavra_Escondida
+
+def Tentando_uma_Letra(letra_escolhida, Palavra_secreta, letra, chance):
+    if letra not in letra_escolhida:
+        letra_escolhida.append(letra)
+        correto.play(0)
+        if letra not in Palavra_secreta:
+            chance += 1
+            erro.play(0)
+            correto.stop()
+    elif letra in letra_escolhida:
+        pass
+    return letra_escolhida, chance
+
+def Palavra_do_Jogo(window, Palavra_Escondida):
+    palavra = fonte4.render(Palavra_Escondida, 1, (135,206,235),)
+    window.blit(palavra, (300, 530))
+
+def Restart_do_Jogo(Palavra_Escondida, end_game, chance, letra, letra_escolhida, click_last_status, click,
+                    mouse_position_x, mouse_position_y):
+    count = 0
+    limite = len(Palavra_Escondida)
+    for n in range(len(Palavra_Escondida)):
+        if Palavra_Escondida[n] != '_':
+            count += 1
+
+        if count == limite:
+            textof = fonte5.render('VOCÊ VENCEU!', 1, (0, 250, 0))
+            window.blit(textof, (590, 300))
+            textof3 = fonte6.render('Aperte Reiniciar para jogar novamente.', 1, (0, 250, 0))
+            window.blit(textof3, (600, 360))
+    if count == limite and click_last_status == False and click[0] == True:
+        print('Ok')
+        if mouse_position_x >= 700 and mouse_position_x <= 900 and mouse_position_y >= 100 and mouse_position_y <= 165:
+            letra_escolhida = [' ', '-']
+            end_game = True
+            chance = 0
+            letra = ' '
+
+    return end_game, chance, letra_escolhida, letra
+
+
+while True:
+    for event in pg.event.get():
+        if event.type == pg.QUIT:
+            pg.quit()
+            quit()
+
+        if event.type == pg.KEYDOWN:
+            letra = str(pg.key.name(event.key)).upper()
+            print(letra)
+            if chance == 6:
+                letra = ' '
+                pg.quit()
+                quit()
+
+
+
+    mouse = pg.mouse.get_pos()
+    mouse_position_x = mouse[0]
+    mouse_position_y = mouse[1]
+    click = pg.mouse.get_pressed()
+
+    Desenho_da_Forca(window, chance)
+    letra_escolhida, chance = Tentando_uma_Letra(letra_escolhida, Palavra_secreta, letra, chance)
+    Palavra_secreta, end_game = Sorteando_Palavra(Palavras, Palavra_secreta, end_game)
+    Palavra_do_Jogo(window, Palavra_Escondida)
+    Palavra_Escondida = Escondendo_Palavra(Palavra_secreta, Palavra_Escondida, letra_escolhida)
+    restart(window)
+    end_game, chance, letra_escolhida, letra = Restart_do_Jogo(Palavra_Escondida, end_game, chance, letra,
+                                    letra_escolhida, click_last_status, click, mouse_position_x, mouse_position_y)
+
+    if click[0] == True:
+        click_last_status = True
+    else:
+        click_last_status = False
+
+    pg.display.update()
